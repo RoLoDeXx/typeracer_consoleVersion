@@ -2,7 +2,7 @@
 #include<stdlib.h>                         //for system(),rand() and all
 #include<string.h>
 #include<windows.h>                        //getstdhandle/consoleptr
-#include<graphics.h>                         //cstlib.h
+//#include<graphics.h>                         //cstlib.h
 #include<dos.h>
 #include<time.h>
 #include<iostream>
@@ -245,6 +245,7 @@ public:
 
   void setDifficulty(int setDifficulty,char pName[])
   {
+      difficulty = 10;
       if(setDifficulty>0)
         setDifficulty = 20;
       difficulty = setDifficulty;
@@ -334,6 +335,23 @@ public:
 int main()
 {
     int menu_item=0, x=7;
+    gotoXY(15,8);printf("RRRRRRRRRRRRRRRRR\n");delay5;
+    gotoXY(15,9);printf("R::::::::::::::::R\n");delay5;
+    gotoXY(15,10);printf("R::::::RRRRRR:::::R\n");delay5;
+    gotoXY(15,11);printf("RR:::::R     R:::::R\n");delay5;
+    gotoXY(15,12);printf("  R::::R     R:::::R  aaaaaaaaaaaaa      cccccccccccccccc    eeeeeeeeeeee    rrrrr   rrrrrrrrr\n");delay5;
+    gotoXY(15,13);printf("  R::::R     R:::::R  a::::::::::::a   cc:::::::::::::::c  ee::::::::::::ee  r::::rrr:::::::::r  \n");delay5;
+    gotoXY(15,14);printf("  R::::RRRRRR:::::R   aaaaaaaaa:::::a c:::::::::::::::::c e::::::eeeee:::::eer:::::::::::::::::r \n");delay5;
+    gotoXY(15,15);printf("  R:::::::::::::RR             a::::ac:::::::cccccc:::::ce::::::e     e:::::err::::::rrrrr::::::r\n");delay5;
+    gotoXY(15,16);printf("  R::::RRRRRR:::::R     aaaaaaa:::::ac::::::c     ccccccce:::::::eeeee::::::e r:::::r     r:::::r\n");delay5;
+    gotoXY(15,17);printf("  R::::R     R:::::R  aa::::::::::::ac:::::c             e:::::::::::::::::e  r:::::r     rrrrrrr\n");delay5;
+    gotoXY(15,18);printf("  R::::R     R:::::R a::::aaaa::::::ac:::::c             e::::::eeeeeeeeeee   r:::::r            \n");delay5;
+    gotoXY(15,19);printf("  R::::R     R:::::Ra::::a    a:::::ac::::::c     ccccccce:::::::e            r:::::r            \n");delay5;
+    gotoXY(15,20);printf("RR:::::R     R:::::Ra::::a    a:::::ac:::::::cccccc:::::ce::::::::e           r:::::r            \n");delay5;
+    gotoXY(15,21);printf("R::::::R     R:::::Ra:::::aaaa::::::a c:::::::::::::::::c e::::::::eeeeeeee   r:::::r            \n");delay5;
+    gotoXY(15,22);printf("R::::::R     R:::::R a::::::::::aa:::a cc:::::::::::::::c  ee:::::::::::::e   r:::::r            \n");delay5;
+    gotoXY(15,23);printf("RRRRRRRR     RRRRRRR  aaaaaaaaaa  aaaa   cccccccccccccccc    eeeeeeeeeeeeee   rrrrrrr            \n");delay5;
+    fflush(stdin);
     gotoXY(45,25);system("pause");
     Sleep(500);
     system("cls");
@@ -392,6 +410,24 @@ int main()
                     printf(" Learning the art");
                     Sleep(700);
                     system("cls");
+                    gotoXY(20,8);printf("               AAA                                         tttt\n");delay5;
+                    gotoXY(20,9);printf("              A:::A                                     ttt:::t\n");delay5;
+                    gotoXY(20,10);printf("             A:::::A                                    t:::::t\n");delay5;
+                    gotoXY(20,11);printf("            A:::::::A                                   t:::::t\n");delay5;
+                    gotoXY(20,12);printf("           A:::::::::A         rrrrr   rrrrrrrrr  ttttttt:::::ttttttt\n");delay5;
+                    gotoXY(20,13);printf("          A:::::A:::::A        r::::rrr:::::::::r t:::::::::::::::::t\n");delay5;
+                    gotoXY(20,14);printf("         A:::::A A:::::A       r:::::::::::::::::rt:::::::::::::::::t\n");delay5;
+                    gotoXY(20,15);printf("        A:::::A   A:::::A      rr::::::rrrrr::::::tttttt:::::::tttttt\n");delay5;
+                    gotoXY(20,16);printf("       A:::::A     A:::::A      r:::::r     r:::::r     t:::::t\n");delay5;
+                    gotoXY(20,17);printf("      A:::::AAAAAAAAA:::::A     r:::::r     rrrrrrr     t:::::t\n");delay5;
+                    gotoXY(20,18);printf("     A:::::::::::::::::::::A    r:::::r                 t:::::t\n");delay5;
+                    gotoXY(20,19);printf("    A:::::AAAAAAAAAAAAA:::::A   r:::::r                 t:::::t    tttttt\n");delay5;
+                    gotoXY(20,20);printf("   A:::::A             A:::::A  r:::::r                 t::::::tttt:::::t\n");delay5;
+                    gotoXY(20,21);printf("  A:::::A               A:::::A r:::::r                 tt::::::::::::::t\n");delay5;
+                    gotoXY(20,22);printf(" A:::::A                 A:::::Ar:::::r                   tt:::::::::::tt\n");delay5;
+                    gotoXY(20,23);printf("AAAAAAA                   AAAAAArrrrrrr                     ttttttttttt\n");delay5;
+                    Sleep(700);
+                    system("cls");
                     learnTyping();
                     break;
 				}
@@ -422,8 +458,10 @@ int main()
                     gotoXY(20,22);printf("MMMMMMMM               MMMMMMMM   ooooooooooo      ddddddddd   ddddd    eeeeeeeeeeeeee       \n");delay5;
                     gotoXY(45,25);printf("Type in a 0 for EASY or 1 for HARD");
                     gotoXY(45,26);scanf("%d",&difficulty);
+                    fflush(stdin);
                     gotoXY(45,27);printf("Type in your Name");
                     gotoXY(45,28);scanf("%s",&playerName);
+                    fflush(stdin);
                     playerObj.setDifficulty(difficulty,playerName);
                     system("cls");
                     break;
@@ -614,12 +652,21 @@ void showHighScores()
 
   sort(highScores.begin(),highScores.end());
 
-  for(int ii=0;ii+2<highScores.size();ii+=1)
+  for(int ii=0;ii<highScores.size()/2;ii++)
   {
      gotoXY(40,26+ii);
-     printf("%s\t\t\t\t%s\n",highScores[ii].c_str(),highScores[ii+2].c_str());
+     printf("%s\t\t\t\t\n",highScores[ii].c_str());
+  }
+
+  int gotoPositioner = 0;
+  for(int ii= highScores.size()/2;ii<highScores.size();ii++)
+  {
+     gotoXY(60,26+gotoPositioner);
+     printf("%s\t\t\t\t\n",highScores[ii].c_str());
+     gotoPositioner++;
   }
   cin.get();
+
   fileObj.close();
   system("cls");
 }
