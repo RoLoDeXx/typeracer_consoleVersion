@@ -1,0 +1,388 @@
+#include<stdio.h>
+#include<stdlib.h>                         //for system(),rand() and all
+#include<string.h>
+#include<windows.h>                        //getstdhandle/consoleptr cstlib.h
+#include<dos.h>
+#include<time.h>
+#include<iostream>
+#include<vector>
+#include<stack>
+#include<chrono>
+#include<fstream>
+#include<algorithm>
+#define delay5 Sleep(50)
+
+using namespace std;
+using namespace chrono;
+fstream fileObj;
+HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); // used for goto       
+COORD CursorPosition; // used for goto                                  
+
+void learnTyping();
+void credit();
+void playGame();
+void showHighScores();
+
+void gotoXY(int x, int y)
+{
+	CursorPosition.X = x;
+	CursorPosition.Y = y;
+	SetConsoleCursorPosition(console,CursorPosition);
+}
+
+void SetColor(int ForgC)
+{
+   WORD wColor;
+
+   HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+   CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+                     //We use csbi for the wAttributes word.
+   if(GetConsoleScreenBufferInfo(hStdOut, &csbi))
+   {
+               //Mask out all but the background attribute, and add in the forgournd     color
+        wColor = (csbi.wAttributes & 0xF0) + (ForgC & 0x0F);
+        SetConsoleTextAttribute(hStdOut, wColor);
+   }
+   return;
+}
+
+class Player
+{
+private:
+  float score;
+  char name[20];
+  int difficulty;
+public:
+  Player(char pName[]="N00B1E")
+  {
+      score = 0.3;
+      difficulty = 10;
+      strcpy(name,pName);
+  }
+  void displayScore(float timeTaken,stack<string>correct,stack<string>incorrect)
+  {
+      float totalWords = correct.size() + incorrect.size();
+      float accuracy = (correct.size() / totalWords) * 100;
+      float speed    = (correct.size() / timeTaken) * 100;
+      score = (accuracy * correct.size() * speed)/3;
+
+      gotoXY(40,8);
+      printf("Name = %s",name);
+      Sleep(300);
+      gotoXY(40,11);
+      printf("Typing speed = %f WPM",speed);
+      Sleep(300);
+      gotoXY(40,13);
+      printf("Typing accuracy = %f %%",accuracy);
+      Sleep(300);
+      gotoXY(40,15);
+      Sleep(300);
+      printf("Total score = %f Keys",score);
+//      printf("Total score = %f",accuracy);
+//      Sleep(300);
+      Sleep(5000);
+      system("cls");
+  }
+
+  void setDifficulty(int setDifficulty,char pName[])
+  {
+      difficulty = 10;
+      if(setDifficulty>0)
+        setDifficulty = 20;
+      difficulty = setDifficulty;
+      strcpy(name,pName);
+  }
+
+  void playGame()
+  {
+      fflush(stdin);
+      stack<string> correctWords;
+      stack<string> incorrectWords;
+      vector<string> sentences;
+      sentences.push_back("Sphinx");
+      sentences.push_back("black");
+      sentences.push_back("quartz");
+      sentences.push_back("judge");
+      sentences.push_back("vow");
+      sentences.push_back("Jackdaws");
+      sentences.push_back("love");
+      sentences.push_back("sphinx");
+      sentences.push_back("quartz");
+      sentences.push_back("Pack");
+      sentences.push_back("box");
+      sentences.push_back("five");
+      sentences.push_back("dozen");
+      sentences.push_back("liquor");
+      sentences.push_back("jugs");
+      sentences.push_back("quick");
+      sentences.push_back("onyx");
+      sentences.push_back("goblin");
+      sentences.push_back("jumps");
+      sentences.push_back("over");
+      sentences.push_back("lazy");
+      sentences.push_back("dwarf");
+      sentences.push_back("fjord");
+      sentences.push_back("bank");
+      sentences.push_back("glyphs");
+      sentences.push_back("vext");
+      sentences.push_back("quiz");
+      sentences.push_back("razorback");
+      sentences.push_back("jumping");
+      sentences.push_back("frogs");
+      sentences.push_back("level");
+      sentences.push_back("piqued");
+      sentences.push_back("gymnasts");
+      sentences.push_back("Cozy");
+      sentences.push_back("lummox");
+      sentences.push_back("gives");
+      sentences.push_back("smart");
+      sentences.push_back("squid");
+      sentences.push_back("job");
+      sentences.push_back("pen");
+      srand(time(0));
+      char typedWord[20];
+      auto timeStart = high_resolution_clock::now();
+      while(difficulty--)
+      {
+          char testCase[20];
+          int random = rand() % 35;
+          strcpy(testCase,sentences[random].c_str());
+          system("cls");
+          gotoXY(50,10);
+          printf("Q-\" %s \"\n",testCase);
+          gotoXY(50,12);
+          printf("A-  ");
+          scanf("%s",&typedWord);
+          if(strcmp(typedWord,testCase)==0)
+              correctWords.push(testCase);
+          else
+              incorrectWords.push(testCase);
+      }
+      cin.get();
+      auto timeEnd = high_resolution_clock::now();
+      int timeTaken = duration_cast<seconds>(timeEnd - timeStart).count();
+      system("cls");
+      displayScore(timeTaken,correctWords,incorrectWords);
+      fileObj.open("scores.txt",ios::app);
+      if(!fileObj.is_open())
+      {
+        printf("file failed\n");
+        exit(1);
+      }
+      fileObj<<name<<"\t"<<score<<"\n";
+      fileObj.close();
+  }
+}playerObj;
+
+int main()
+{
+    int menu_item=0, x=7;
+    gotoXY(15,8);printf("RRRRRRRRRRRRRRRRR\n");delay5;
+    gotoXY(15,9);printf("R::::::::::::::::R\n");delay5;
+    gotoXY(15,10);printf("R::::::RRRRRR:::::R\n");delay5;
+    gotoXY(15,11);printf("RR:::::R     R:::::R\n");delay5;
+    gotoXY(15,12);printf("  R::::R     R:::::R  aaaaaaaaaaaaa      cccccccccccccccc    eeeeeeeeeeee    rrrrr   rrrrrrrrr\n");delay5;
+    gotoXY(15,13);printf("  R::::R     R:::::R  a::::::::::::a   cc:::::::::::::::c  ee::::::::::::ee  r::::rrr:::::::::r  \n");delay5;
+    gotoXY(15,14);printf("  R::::RRRRRR:::::R   aaaaaaaaa:::::a c:::::::::::::::::c e::::::eeeee:::::eer:::::::::::::::::r \n");delay5;
+    gotoXY(15,15);printf("  R:::::::::::::RR             a::::ac:::::::cccccc:::::ce::::::e     e:::::err::::::rrrrr::::::r\n");delay5;
+    gotoXY(15,16);printf("  R::::RRRRRR:::::R     aaaaaaa:::::ac::::::c     ccccccce:::::::eeeee::::::e r:::::r     r:::::r\n");delay5;
+    gotoXY(15,17);printf("  R::::R     R:::::R  aa::::::::::::ac:::::c             e:::::::::::::::::e  r:::::r     rrrrrrr\n");delay5;
+    gotoXY(15,18);printf("  R::::R     R:::::R a::::aaaa::::::ac:::::c             e::::::eeeeeeeeeee   r:::::r            \n");delay5;
+    gotoXY(15,19);printf("  R::::R     R:::::Ra::::a    a:::::ac::::::c     ccccccce:::::::e            r:::::r            \n");delay5;
+    gotoXY(15,20);printf("RR:::::R     R:::::Ra::::a    a:::::ac:::::::cccccc:::::ce::::::::e           r:::::r            \n");delay5;
+    gotoXY(15,21);printf("R::::::R     R:::::Ra:::::aaaa::::::a c:::::::::::::::::c e::::::::eeeeeeee   r:::::r            \n");delay5;
+    gotoXY(15,22);printf("R::::::R     R:::::R a::::::::::aa:::a cc:::::::::::::::c  ee:::::::::::::e   r:::::r            \n");delay5;
+    gotoXY(15,23);printf("RRRRRRRR     RRRRRRR  aaaaaaaaaa  aaaa   cccccccccccccccc    eeeeeeeeeeeeee   rrrrrrr            \n");delay5;
+    fflush(stdin);
+    gotoXY(45,25);system("pause");
+    Sleep(500);
+    system("cls");
+    gotoXY(48,7); printf("*");
+
+	while(1==1)
+	{
+        gotoXY(50,7);  printf(" Play TypeRacer");
+		gotoXY(50,8);  printf(" Game Settings");
+		gotoXY(50,9); printf(" High-scores");
+		gotoXY(50,10); printf(" Credits");
+		gotoXY(50,11); printf(" Exit");
+		system("pause>nul");
+
+		if(GetAsyncKeyState(VK_DOWN) && x != 12) //down button pressed
+		{
+			gotoXY(48,x); printf("  ");
+			x++;
+			gotoXY(48,x); printf("*");
+			menu_item++;
+			continue;
+		}
+
+		if(GetAsyncKeyState(VK_UP) && x != 7) //up button pressed
+		{
+			gotoXY(48,x);
+            printf("  ");
+			x--;
+			gotoXY(48,x);
+            printf("*");
+			menu_item--;
+			continue;
+		}
+
+		if(GetAsyncKeyState(VK_RETURN))
+        { // Enter key pressed
+			switch(menu_item)
+            {
+				case 0:
+                {
+                    system("cls");
+                    gotoXY(50,7);
+                    printf(" Play TypeRacer");
+                    Sleep(700);
+                    system("cls");
+                    playerObj.playGame();
+                    break;
+				}
+
+				case 1:
+                {
+                    system("cls");
+                    gotoXY(50,8);
+                    printf(" Game Settings");
+                    Sleep(700);
+                    system("cls");
+                    int difficulty;
+                    char playerName[20];
+                    gotoXY(20,8);printf("MMMMMMMMM             MMMMMMMMM                             DDDDDDDD\n");delay5;
+                    gotoXY(20,9);printf("M::::::::M           M::::::::M                             d::::::d\n");delay5;
+                    gotoXY(20,10);printf("M:::::::::M         M:::::::::M                             d:::::d             \n");delay5;
+                    gotoXY(20,11);printf("M::::::::::M       M::::::::::M   ooooooooooo       ddddddddd:::::d     eeeeeeeeeeee        \n");delay5;
+                    gotoXY(20,12);printf("M:::::::::::M     M:::::::::::M oo:::::::::::oo   dd::::::::::::::d   ee::::::::::::ee       \n");delay5;
+                    gotoXY(20,13);printf("M:::::::M::::M   M::::M:::::::Mo:::::::::::::::o d::::::::::::::::d  e::::::eeeee:::::ee     \n");delay5;
+                    gotoXY(20,14);printf("M::::::M M::::M M::::M M::::::Mo:::::ooooo:::::od:::::::ddddd:::::d e::::::e     e:::::e     \n");delay5;
+                    gotoXY(20,15);printf("M::::::M  M::::M::::M  M::::::Mo::::o     o::::od::::::d    d:::::d e:::::::eeeee::::::e     \n");delay5;
+                    gotoXY(20,16);printf("M::::::M   M:::::::M   M::::::Mo::::o     o::::od:::::d     d:::::d e:::::::::::::::::e      \n");delay5;
+                    gotoXY(20,17);printf("M::::::M    M:::::M    M::::::Mo::::o     o::::od:::::d     d:::::d e::::::eeeeeeeeeee       \n");delay5;
+                    gotoXY(20,18);printf("M::::::M     MMMMM     M::::::Mo::::o     o::::od:::::d     d:::::d e:::::::e                \n");delay5;
+                    gotoXY(20,19);printf("M::::::M               M::::::Mo:::::ooooo:::::od::::::ddddd::::::dde::::::::e               \n");delay5;
+                    gotoXY(20,20);printf("M::::::M               M::::::Mo:::::::::::::::o d:::::::::::::::::d e::::::::eeeeeeee       \n");delay5;
+                    gotoXY(20,21);printf("M::::::M               M::::::M oo:::::::::::oo   d:::::::::ddd::::d  ee:::::::::::::e       \n");delay5;
+                    gotoXY(20,22);printf("MMMMMMMM               MMMMMMMM   ooooooooooo      ddddddddd   ddddd    eeeeeeeeeeeeee       \n");delay5;
+                    gotoXY(45,25);printf("Type in a 0 for EASY or 1 for HARD");
+                    gotoXY(45,26);scanf("%d",&difficulty);
+                    fflush(stdin);
+                    gotoXY(45,27);printf("Type in your Name");
+                    gotoXY(45,28);scanf("%s",&playerName);
+                    fflush(stdin);
+                    playerObj.setDifficulty(difficulty,playerName);
+                    system("cls");
+                    break;
+				}
+
+				case 2:
+                {
+                    system("cls");
+                    gotoXY(50,9);
+                    printf(" High-scores");
+                    Sleep(700);
+                    showHighScores();
+                    break;
+				}
+
+				case 3:
+                {
+                    system("cls");
+                    gotoXY(50,10);
+                    printf(" Credits");
+                    Sleep(700);
+                    credit();
+                    break;
+				}
+
+				case 4:
+                {
+                    system("cls");
+                    gotoXY(50,11);  printf(" Exit");
+                    Sleep(700);
+                    exit(0);
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+   return 0;
+}
+
+void credit()
+{
+  gotoXY(20,5);printf(",---,---,---,---,---,---,---,---,---,---,---,---,---,-------,\n");delay5;
+  gotoXY(20,6);printf("|   | T | Y | P | E | R | A | C | E | R |   | L | I | T  E  |\n");delay5;
+  gotoXY(20,7);printf("|---'---'---'---'---'---'---'---'---'---'---'---'---'-------|\n");delay5;
+  gotoXY(20,8);printf("|     |   |   |   | S | A | M | A | R | T | H |   |   |     |\n");delay5;
+  gotoXY(20,9);printf("|-----'---'---'---'---'---'---'---'---'---'---'---'---'-----|\n");delay5;
+  gotoXY(20,10);printf("|      |   |   |   | S | H | A | R | M | A |   |   |        |\n");delay5;
+  gotoXY(20,11);printf("|------'---'---'---'---'---'---'---'---'---'---'---'--------|\n");delay5;
+  gotoXY(20,12);printf("|        |   |   |   |   |   |   |   |   |   |   |   |      |\n");delay5;
+  gotoXY(20,13);printf("|--------'----'---'---'---'---'---'---'---'---'------'------|\n");delay5;
+  gotoXY(20,14);printf("|      |      |     |   C++/C console  |      |      |      |\n");delay5;
+  gotoXY(20,15);printf("'------'------'-----'------------------'------'------'------'\n");delay5;
+  std::cin.get();
+  system("cls");
+}
+
+void showHighScores()
+{
+  system("cls");
+  gotoXY(20,8);printf("BBBBBBBBBBBBBBBBB                                                                 dddddddd\n");delay5;
+  gotoXY(20,9);printf("B::::::::::::::::B                                                                d::::::d\n");delay5;
+  gotoXY(20,10);printf("B::::::BBBBBB:::::B                                                               d::::::d\n");delay5;
+  gotoXY(20,11);printf("BB:::::B     B:::::B                                                              d:::::d\n");delay5;
+  gotoXY(20,12);printf("  B::::B     B:::::B  ooooooooooo    aaaaaaaaaaaaa rrrrr   rrrrrrrrr      ddddddddd:::::d\n");delay5;
+  gotoXY(20,13);printf("  B::::B     B:::::Boo:::::::::::oo  a::::::::::::ar::::rrr:::::::::r   dd::::::::::::::d\n");delay5;
+  gotoXY(20,14);printf("  B::::BBBBBB:::::Bo:::::::::::::::o aaaaaaaaa:::::r:::::::::::::::::r d::::::::::::::::d\n");delay5;
+  gotoXY(20,15);printf("  B:::::::::::::BB o:::::ooooo:::::o          a::::rr::::::rrrrr::::::d:::::::ddddd:::::d\n");delay5;
+  gotoXY(20,16);printf("  B::::BBBBBB:::::Bo::::o     o::::o   aaaaaaa:::::ar:::::r     r:::::d::::::d    d:::::d\n");delay5;
+  gotoXY(20,17);printf("  B::::B     B:::::o::::o     o::::o aa::::::::::::ar:::::r     rrrrrrd:::::d     d:::::d\n");delay5;
+  gotoXY(20,18);printf("  B::::B     B:::::o::::o     o::::oa::::aaaa::::::ar:::::r           d:::::d     d:::::d\n");delay5;
+  gotoXY(20,19);printf("  B::::B     B:::::o::::o     o::::a::::a    a:::::ar:::::r           d:::::d     d:::::d\n");delay5;
+  gotoXY(20,20);printf("BB:::::BBBBBB::::::o:::::ooooo:::::a::::a    a:::::ar:::::r           d::::::ddddd::::::dd\n");delay5;
+  gotoXY(20,21);printf("B:::::::::::::::::Bo:::::::::::::::a:::::aaaa::::::ar:::::r            d:::::::::::::::::d\n");delay5;
+  gotoXY(20,22);printf("B::::::::::::::::B  oo:::::::::::oo a::::::::::aa:::r:::::r             d:::::::::ddd::::d\n");delay5;
+  gotoXY(20,23);printf("BBBBBBBBBBBBBBBBB     ooooooooooo    aaaaaaaaaa  aaarrrrrrr              ddddddddd   ddddd\n");delay5;
+  vector<string>highScores;
+  string line;
+  fileObj.open("scores.txt",ios::in);
+
+  if(fileObj.fail())
+     cout<<"failed";
+
+  while(fileObj >> line)
+  {
+     highScores.push_back(line);
+  }
+
+  sort(highScores.begin(),highScores.end());
+
+  for(int ii=0;ii<highScores.size()/2;ii++)
+  {
+     gotoXY(40,26+ii);
+     printf("%s Keys\t\t\t\t\n",highScores[ii].c_str());
+  }
+
+  int gotoPositioner = 0;
+  for(int ii= highScores.size()/2;ii<highScores.size();ii++)
+  {
+     gotoXY(60,26+gotoPositioner);
+     printf("%s\t\t\t\t\n",highScores[ii].c_str());
+     gotoPositioner++;
+  }
+  cin.get();
+
+  fileObj.close();
+  system("cls");
+}
